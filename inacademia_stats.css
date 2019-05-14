@@ -1,0 +1,133 @@
+table {
+    border-collapse: collapse;
+    border: 0;
+    width: 80%;
+    box-shadow: 1px 2px 3px #ccc;
+    font-family: "Verdana", Arial;
+}
+td, th {
+    border: 1px solid #666;
+    font-size: 75%;
+    vertical-align: baseline;
+    padding: 4px 5px;
+}
+h1 {
+    margin-bottom: 0px;
+    font-family: "Verdana", Arial;
+}
+h2 {
+    margin-bottom: 0px;
+    font-family: "Verdana", Arial;
+}
+a {
+    text-decoration: none;
+}
+pre {
+    font-size: 1.4em;
+    font-weight: bold;
+}
+
+/* Style the tab */
+.tab {
+  overflow: hidden;
+  border: 1px solid #ccc;
+  background-color: #f1f1f1;
+}
+
+.thHeader {
+    border: 0px;
+    font-size: 75%;
+    vertical-align: baseline;
+    //padding: 4px 5px;
+}
+
+/* Style the tab */
+.filter {
+  overflow: hidden;
+  border: 1px solid #ccc;
+}
+
+/* Style the buttons that are used to open the tab content */
+.tab button {
+  background-color: inherit;
+  float: left;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 14px 16px;
+  transition: 0.3s;
+  font-family: "Verdana", Arial;
+}
+
+/* Style the buttons that are used to open the tab content */
+.filter button {
+  background-color: inherit;
+  float: left;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 14px 16px;
+  transition: 0.3s;
+}
+
+/* Change background color of buttons on hover */
+.tab button:hover {
+  background-color: #ddd;
+}
+
+/* Create an active/current tablink class */
+.tab button.active {
+  background-color: #ccc;
+}
+
+/* Style the tab content */
+.tabcontent {
+  display: none;
+  padding: 6px 12px;
+  border: 1px solid #ccc;
+  border-top: none;
+} 
+
+.menutab {
+  overflow: hidden;
+  border: 1px solid #ccc;
+  background-color: #f1f1f1;
+}
+
+/* Style the buttons that are used to open the tab content */
+.menutab button {
+  background-color: inherit;
+  float: left;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 14px 16px;
+  transition: 0.3s;
+}
+
+/* Style the buttons that are used to open the tab content */
+.menutab input {
+  #background-color: inherit;
+  float: left;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 14px 16px;
+  transition: 0.3s;
+}
+
+/* Change background color of buttons on hover */
+.menutab button:hover {
+  background-color: #ddd;
+}
+
+/* Create an active/current tablink class */
+.menutab button.active {
+  background-color: #ccc;
+}
+
+.menutab_element {
+  #width: 400px;
+  float: left;
+  display: inline-block;
+}
