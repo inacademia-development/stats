@@ -1,6 +1,13 @@
 <?php
 include('queries.php');
 
+require_once('/var/simplesamlphp/lib/_autoload.php');
+$as = new \SimpleSAML\Auth\Simple('default-sp');
+$as->login([
+    'saml:idp' => 'https://login.terena.org/wayf/saml2/idp/metadata.php',
+]);
+$as->requireAuth();
+
 function table($res) {
     $res->data_seek(0);
 
@@ -255,6 +262,11 @@ echo "<div id='Logs' class='tabcontent'>";
 echo showTableHeader($t, $p, 'Logs', $filter); 
 echo table(get_logs());
 echo "</div>";
+
+echo "<hr/>";
+$attributes = $as->getAttributes();
+print_r($attributes);
+
 ?>
 
 </body>
