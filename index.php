@@ -1,5 +1,6 @@
 <?php
 include('queries.php');
+include('auth.php');
 
 function table($res) {
     $res->data_seek(0);
@@ -34,6 +35,8 @@ function table($res) {
 }
 
 function showTableHeader($t, $p, $tab, $filter) {
+
+	$dspname="";
 
 	switch($tab) {
 		case 'UniqueSessions': 
@@ -85,7 +88,7 @@ $tab = isset($_GET['tab'])?$_GET['tab']:"SPSessions";
 
 
 echo "<body onLoad='openTab(event, &quot;".$tab."&quot;)'>";
-
+echo "<div><table><tr><td>";
 echo "<form method='post' name='state_form' id='state_form'>";
 echo "<input type='hidden' name='time' value='".$t."'>";
 echo "<input type='hidden' name='tab' value='".$tab."'>";
@@ -255,6 +258,10 @@ echo "<div id='Logs' class='tabcontent'>";
 echo showTableHeader($t, $p, 'Logs', $filter); 
 echo table(get_logs());
 echo "</div>";
+
+$attributes = $as->getAttributes();   
+print_r("<div align='right'>Authenticated as: ". get_displayname($attributes)."</div>");
+echo "</td></tr></table></div>";
 ?>
 
 </body>
