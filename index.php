@@ -1,12 +1,6 @@
 <?php
 include('queries.php');
-
-require_once('/var/simplesamlphp/lib/_autoload.php');
-$as = new \SimpleSAML\Auth\Simple('default-sp');
-$as->login([
-    'saml:idp' => 'https://login.terena.org/wayf/saml2/idp/metadata.php',
-]);
-$as->requireAuth();
+include('auth.php');
 
 function table($res) {
     $res->data_seek(0);
@@ -263,10 +257,12 @@ echo showTableHeader($t, $p, 'Logs', $filter);
 echo table(get_logs());
 echo "</div>";
 
-echo "<hr/>";
-$attributes = $as->getAttributes();
-print_r($attributes);
+echo "<div class='menutab'><span class='tablinks'>";
+$attributes = $as->getAttributes();   
+print_r("Authenticated as: ". get_displayname($attributes));
+print_r(user_in_group("GN4Phase3:WPs:WP5 T2", $attributes));
 
+echo "</span></div>";
 ?>
 
 </body>
