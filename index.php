@@ -36,6 +36,8 @@ function table($res) {
 
 function showTableHeader($t, $p, $tab, $filter) {
 
+	$dspname="";
+
 	switch($tab) {
 		case 'UniqueSessions': 
 			$dspname="Unique sessions\n"; 
@@ -86,7 +88,7 @@ $tab = isset($_GET['tab'])?$_GET['tab']:"SPSessions";
 
 
 echo "<body onLoad='openTab(event, &quot;".$tab."&quot;)'>";
-
+echo "<div><table><tr><td>";
 echo "<form method='post' name='state_form' id='state_form'>";
 echo "<input type='hidden' name='time' value='".$t."'>";
 echo "<input type='hidden' name='tab' value='".$tab."'>";
@@ -257,12 +259,9 @@ echo showTableHeader($t, $p, 'Logs', $filter);
 echo table(get_logs());
 echo "</div>";
 
-echo "<div class='menutab'><span class='tablinks'>";
 $attributes = $as->getAttributes();   
-print_r("Authenticated as: ". get_displayname($attributes));
-print_r(user_in_group("GN4Phase3:WPs:WP5 T2", $attributes));
-
-echo "</span></div>";
+print_r("<div align='right'>Authenticated as: ". get_displayname($attributes)."</div>");
+echo "</td></tr></table></div>";
 ?>
 
 </body>
