@@ -6,6 +6,8 @@ $as->requireAuth();
 
 $required_group = "GN4Phase3:WPs:WP5 T2";
 
+var_dump($_ENV);
+
 $attributes = $as->getAttributes();   
 $displayname = get_displayname($attributes);
 $isuser_in_group = user_in_group($required_group, $attributes);
