@@ -82,12 +82,15 @@ function get_sessionspercountry($s, $e, $f) {
     return get_data($query);
 }
 
-function get_spsessions($s, $e, $f) {
+function get_spsessions($s, $e, $f, $sp) {
     $query  = "select count(l.log_sessionid) c, l.log_sp ";
     $query .= "from logs l ";
     $query .= "where l.log_timestamp between '$s' and '$e' ";
     if ($f) {
         $query .= "and (l.log_sp like '%$f%') ";
+    }
+    if ($sp) {
+      $query .= "and l.log_sp = '$sp' ";
     }
     $query .= "group by l.log_sp ";
     $query .= "order by c desc;";
@@ -106,12 +109,15 @@ function get_spperidp($s, $e, $f) {
     return get_data($query);
 }
 
-function get_idppersp($s, $e, $f) {
+function get_idppersp($s, $e, $f, $sp) {
     $query  = "select count(l.log_idp) c, l.log_sp ";
     $query .= "from logs l ";
     $query .= "where l.log_timestamp between '$s' and '$e' ";
     if ($f) {
         $query .= "and (l.log_sp like '%$f%') ";
+    }
+    if ($sp) {
+      $query .= "and l.log_sp = '$sp' ";
     }
     $query .= "group by l.log_sp ";
     $query .= "order by c desc;";

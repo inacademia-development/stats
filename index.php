@@ -182,7 +182,7 @@ echo "<button class='tablinks'>";
 echo "<form method='post' name='sp_form' id='sp_form'>";
 echo "<select name=sp onchange='this.form.submit()'>";
 echo "<option value=''>&lt;Select SP&gt;</option>";
-$res = get_spsessions($start, $end, $filter);
+$res = get_spsessions($start, $end, $filter, NULL);
 while ($row = $res->fetch_assoc()) {
   $id = $row['log_sp'];
   echo "<option value='$id'" . ($id==$sp?" selected":"") . ">$id</option>";
@@ -255,7 +255,7 @@ echo "</div>";
 
 echo "<div id='SPSessions' class='tabcontent'>";
 echo showTableHeader($t, $p, 'SPSessions', $filter);
-echo table(get_spsessions($start, $end, $filter));
+echo table(get_spsessions($start, $end, $filter, $sp));
 echo "</div>";
 
 echo "<div id='ServicesPerIdP' class='tabcontent'>";
@@ -265,7 +265,7 @@ echo "</div>";
 
 echo "<div id='IdPs_per_Service' class='tabcontent'>";
 echo showTableHeader($t, $p, 'IdPs_per_Service', $filter);
-echo table(get_idppersp($start, $end, $filter));
+echo table(get_idppersp($start, $end, $filter, $sp));
 echo "</div>";
 
 echo "<div id='Domains' class='tabcontent'>";
