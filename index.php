@@ -6,8 +6,8 @@ function table($res) {
     $res->data_seek(0);
 
 	$row_cnt = $res->num_rows;
-    
-	if (($res->num_rows) == 0) { 
+
+	if (($res->num_rows) == 0) {
 		$ret = "Result set has ".$row_cnt." rows.\n";
 	}
 	else
@@ -39,11 +39,20 @@ function showTableHeader($t, $p, $tab, $filter) {
 	$dspname="";
 
 	switch($tab) {
-		case 'UniqueSessions': 
-			$dspname="Unique sessions\n"; 
+		case 'UniqueSessions':
+			$dspname="Unique sessions\n";
+			break;
+		case 'UniqueIdPs':
+			$dspname="Unique IdP's\n";
 			break;
 		case 'IdPSessions':
 			$dspname="Sessions per IdP\n";
+			break;
+		case 'IdPSessionsPerSP':
+			$dspname="IdP sessions per SP\n";
+			break;
+		case 'SessionsPerCountry':
+			$dspname="Sessions per Country\n";
 			break;
 		case 'SPSessions':
 			$dspname="Sessions per Service\n";
@@ -75,7 +84,7 @@ function showTableHeader($t, $p, $tab, $filter) {
 <html>
 <head>
 <link rel="stylesheet" type="text/css" href="inacademia_stats.css">
-<script src="inacademia_stats.js"></script> 
+<script src="inacademia_stats.js"></script>
 </head>
 
 <?php
@@ -84,8 +93,7 @@ $t = isset($_GET['t'])?$_GET['t']:time();
 $p = isset($_GET['p'])?$_GET['p']:"month";
 $filter = isset($_GET['f'])?$_GET['f']:"";
 $tab = isset($_GET['tab'])?$_GET['tab']:"SPSessions";
-
-
+$sp = isset($_POST['sp'])?$_POST['sp']:"";
 
 echo "<body onLoad='openTab(event, &quot;".$tab."&quot;)'>";
 echo "<div><table><tr><td>";
@@ -168,15 +176,28 @@ $e -= 1;
 //
 
 echo "<div class='filter'>";
-echo "<button class='tablinks'>Current paramaters: </button>";
+echo "<button class='tablinks'>Current parameters: </button>";
 echo "<button class='tablinks'><b>" . $explain ."</b></button>";
+echo "<button class='tablinks'>";
+echo "<form method='post' name='sp_form' id='sp_form'>";
+echo "<select name=sp onchange='this.form.submit()'>";
+echo "<option value=''>&lt;Select SP&gt;</option>";
+$res = get_spsessions($start, $end, $filter);
+while ($row = $res->fetch_assoc()) {
+  $id = $row['log_sp'];
+  echo "<option value='$id'" . ($id==$sp?" selected":"") . ">$id</option>";
+}
+echo "</select>";
+echo "</form>";
+echo "</button>";
 echo "<button class='tablinks'>Keyword: <b>" . $filter ."</b></button>";
+
 echo "</div>";
 echo "<div class='filter'>";
 echo "</div>";
 
 echo "<div class='menutab'>";
-echo "<button class='tablinks'>Navigate:   </button>";
+echo "<button class='tablinks'>Navigate:</button>";
 echo "<div class='menutab_element'>";
 echo "<button class='tablinks' onclick='openURL(" . strtotime('-1 ' . $p, $t) . ",null,null,null)'>&lt;&lt;</button>";
 echo "<button class='tablinks' onclick='openURL(".strtotime("now").",null,null,null)'>Today</button>";
@@ -189,7 +210,10 @@ echo "</div>";
 <!-- Tab links -->
 <div class="tab">
   <button class="tablinks" onclick="openTab(event, 'UniqueSessions')">Unique Sessions</button>
-  <button class="tablinks" onclick="openTab(event, 'IdPSessions')">Session per IdP</button>
+  <button class="tablinks" onclick="openTab(event, 'UniqueIdPs')">Unique IdP's</button>
+  <button class="tablinks" onclick="openTab(event, 'IdPSessions')">Sessions per IdP</button>
+  <button class="tablinks" onclick="openTab(event, 'IdPSessionsPerSP')">IdP Sessions per SP</button>
+  <button class="tablinks" onclick="openTab(event, 'SessionsPerCountry')">Sessions per Country</button>
   <button class="tablinks" onclick="openTab(event, 'SPSessions')">Session per Service</button>
   <!--
   <button class="tablinks" onclick="openTab(event, 'ServicesPerIdP')">Services per IdP</button>
@@ -205,63 +229,79 @@ echo "</div>";
 
 <?php
 echo "<div id='UniqueSessions' class='tabcontent'>";
-echo showTableHeader($t, $p, 'UniqueSessions', $filter); 
+echo showTableHeader($t, $p, 'UniqueSessions', $filter);
 echo table(get_sessions($start, $end));
 echo "</div>";
 
+echo "<div id='UniqueIdPs' class='tabcontent'>";
+echo showTableHeader($t, $p, 'UniqueIdPs', $filter);
+echo table(get_logidps($start, $end));
+echo "</div>";
+
 echo "<div id='IdPSessions' class='tabcontent'>";
-echo showTableHeader($t, $p, 'IdPSessions', $filter); 
+echo showTableHeader($t, $p, 'IdPSessions', $filter);
 echo table(get_idpsessions($start, $end, $filter));
 echo "</div>";
 
+echo "<div id='IdPSessionsPerSP' class='tabcontent'>";
+echo showTableHeader($t, $p, 'IdPSessionsPerSP', $filter);
+echo table(get_idpsessionspersp($start, $end, $filter, $sp));
+echo "</div>";
+
+echo "<div id='SessionsPerCountry' class='tabcontent'>";
+echo showTableHeader($t, $p, 'SessionsPerCountry', $filter);
+echo table(get_sessionspercountry($start, $end, $filter));
+echo "</div>";
+
 echo "<div id='SPSessions' class='tabcontent'>";
-echo showTableHeader($t, $p, 'SPSessions', $filter); 
+echo showTableHeader($t, $p, 'SPSessions', $filter);
 echo table(get_spsessions($start, $end, $filter));
 echo "</div>";
 
 echo "<div id='ServicesPerIdP' class='tabcontent'>";
-echo showTableHeader($t, $p, 'ServicesPerIdP', $filter); 
+echo showTableHeader($t, $p, 'ServicesPerIdP', $filter);
 echo table(get_spperidp($start, $end, $filter));
 echo "</div>";
 
 echo "<div id='IdPs_per_Service' class='tabcontent'>";
-echo showTableHeader($t, $p, 'IdPs_per_Service', $filter); 
+echo showTableHeader($t, $p, 'IdPs_per_Service', $filter);
 echo table(get_idppersp($start, $end, $filter));
 echo "</div>";
 
 echo "<div id='Domains' class='tabcontent'>";
-echo showTableHeader($t, $p, 'Domains', $filter); 
+echo showTableHeader($t, $p, 'Domains', $filter);
 echo table(get_domains($start, $end, $filter));
 echo "</div>";
 
 echo "<div id='Country' class='tabcontent'>";
-echo showTableHeader($t, $p, 'Country', $filter); 
+echo showTableHeader($t, $p, 'Country', $filter);
 echo table(get_countries($start, $end, $filter));
 echo "</div>";
 
 echo "<div id='Affiliaton' class='tabcontent'>";
-echo showTableHeader($t, $p, 'Affiliaton', $filter); 
+echo showTableHeader($t, $p, 'Affiliaton', $filter);
 echo table(get_affiliations($start, $end));
 echo "</div>";
 
 echo "<div id='Institutions' class='tabcontent'>";
-echo showTableHeader($t, $p, 'Institutions', $filter); 
+echo showTableHeader($t, $p, 'Institutions', $filter);
 echo table(get_idps());
 echo "</div>";
 
 echo "<div id='Services' class='tabcontent'>";
-echo showTableHeader($t, $p, 'Services', $filter); 
+echo showTableHeader($t, $p, 'Services', $filter);
 echo table(get_clients());
 echo "</div>";
 
 echo "<div id='Logs' class='tabcontent'>";
-echo showTableHeader($t, $p, 'Logs', $filter); 
+echo showTableHeader($t, $p, 'Logs', $filter);
 echo table(get_logs());
 echo "</div>";
 
-$attributes = $as->getAttributes();   
+$attributes = $as->getAttributes();
 print_r("<div align='right'>Authenticated as: ". get_displayname($attributes)."</div>");
 echo "</td></tr></table></div>";
+// echo "</form></td></tr></table></div>";
 ?>
 
 </body>
