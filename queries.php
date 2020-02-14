@@ -63,7 +63,7 @@ function get_idpsessionspersp($s, $e, $f, $sp) {
         $query .= "and (l.log_idp like '%$f%' or i.idp_displayname like '%$f%') ";
     }
     if ($sp) {
-      $query .= "and l.log_sp = '$sp' ";
+        $query .= "and l.log_sp = '$sp' ";
     }
     $query .= "group by l.log_idp, l.log_sp ";
     $query .= "order by c desc;";
@@ -90,7 +90,7 @@ function get_spsessions($s, $e, $f, $sp) {
         $query .= "and (l.log_sp like '%$f%') ";
     }
     if ($sp) {
-      $query .= "and l.log_sp = '$sp' ";
+        $query .= "and l.log_sp = '$sp' ";
     }
     $query .= "group by l.log_sp ";
     $query .= "order by c desc;";
@@ -117,7 +117,7 @@ function get_idppersp($s, $e, $f, $sp) {
         $query .= "and (l.log_sp like '%$f%') ";
     }
     if ($sp) {
-      $query .= "and l.log_sp = '$sp' ";
+        $query .= "and l.log_sp = '$sp' ";
     }
     $query .= "group by l.log_sp ";
     $query .= "order by c desc;";
@@ -187,8 +187,16 @@ function get_clients() {
     return get_data($query);
 }
 
-function get_logs() {
-    $query = "select count(*) c from logs;";
+function get_logs($s, $e, $f, $sp) {
+    $query  = "select count(*) c from logs l ";
+    $query .= "where l.log_timestamp between '$s' and '$e' ";
+    if ($f) {
+        $query .= "and (l.log_domain like '%$f%') ";
+    }
+    if ($sp) {
+        $query .= "and l.log_sp = '$sp' ";
+    }
+    $query .= ";";
     return get_data($query);
 }
 
