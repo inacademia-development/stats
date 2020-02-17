@@ -34,7 +34,7 @@ function table($res) {
     return $ret;
 }
 
-function showTableHeader($t, $p, $tab, $filter) {
+function showTableHeader($t, $p, $tab, $filter, $sp) {
 
   $dspname="";
 
@@ -76,7 +76,7 @@ function showTableHeader($t, $p, $tab, $filter) {
       $dspname="Logs\n";
       break;
   }
-  return "<table><tr><td align='left' class='thHeader'><h2>$dspname</h2></td><td align='right'  class='thHeader'>[<a target='_blank' href='acsv.php?t=$t&p=$p&tab=$tab&filter=$filter'>export CSV</a>]</td></tr></table>";
+  return "<table><tr><td align='left' class='thHeader'><h2>$dspname</h2></td><td align='right'  class='thHeader'>[<a target='_blank' href='acsv.php?t=$t&p=$p&tab=$tab&filter=$filter&sp=$sp'>export CSV</a>]</td></tr></table>";
 }
 ?>
 
@@ -218,12 +218,12 @@ echo "</div>";
 <!--   <button class="tablinks" onclick="openTab(event, 'UniqueSessions')" id='UniqueSessions_tab'>Unique Sessions</button> -->
 <!--   <button class="tablinks" onclick="openTab(event, 'IdPSessions')" id='IdPSessions_tab'>Sessions per IdP</button> -->
   <button class="tablinks" onclick="openTab(event, 'IdPSessionsPerSP')" id='IdPSessionsPerSP_tab'>IdP Sessions per Merchant</button>
-  <button class="tablinks" onclick="openTab(event, 'SessionsPerCountry')" id='SessionsPerCountry_tab'>Sessions per Country</button>
   <button class="tablinks" onclick="openTab(event, 'SPSessions')" id='SPSessions_tab'>Session per Merchant</button>
 <!--   <button class="tablinks" onclick="openTab(event, 'ServicesPerIdP') id='ServicesPerIdP_tab'">Services per IdP</button> -->
 <!--   <button class="tablinks" onclick="openTab(event, 'IdPsPerService')" id='IdPsPerService_tab'>IdPs per Service</button> -->
   </div>
   <div style='background: #e0ffe0'>
+  <button class="tablinks" onclick="openTab(event, 'SessionsPerCountry')" id='SessionsPerCountry_tab'>Sessions per Country</button>
   <button class="tablinks" onclick="openTab(event, 'UniqueIdPs')" id='UniqueIdPs_tab'>Unique IdP's</button>
   <button class="tablinks" onclick="openTab(event, 'Domains')" id='Domains_tab'>Domains</button>
   <button class="tablinks" onclick="openTab(event, 'Country')" id='Country_tab'>Country</button>
@@ -245,17 +245,12 @@ echo "</div>";
 // echo "</div>";
 
 echo "<div id='IdPSessionsPerSP' class='tabcontent'>";
-echo showTableHeader($t, $p, 'IdPSessionsPerSP', $filter);
+echo showTableHeader($t, $p, 'IdPSessionsPerSP', $filter, $sp);
 echo table(get_idpsessionspersp($start, $end, $filter, $sp));
 echo "</div>";
 
-echo "<div id='SessionsPerCountry' class='tabcontent'>";
-echo showTableHeader($t, $p, 'SessionsPerCountry', $filter);
-echo table(get_sessionspercountry($start, $end, $filter));
-echo "</div>";
-
 echo "<div id='SPSessions' class='tabcontent'>";
-echo showTableHeader($t, $p, 'SPSessions', $filter);
+echo showTableHeader($t, $p, 'SPSessions', $filter, $sp);
 echo table(get_spsessions($start, $end, $filter, $sp));
 echo "</div>";
 
@@ -268,34 +263,38 @@ echo "</div>";
 // echo showTableHeader($t, $p, 'IdPs_per_Service', $filter);
 // echo table(get_idppersp($start, $end, $filter, $sp));
 // echo "</div>";
+echo "<div id='SessionsPerCountry' class='tabcontent'>";
+echo showTableHeader($t, $p, 'SessionsPerCountry', $filter, $sp);
+echo table(get_sessionspercountry($start, $end, $filter));
+echo "</div>";
 
 echo "<div id='UniqueIdPs' class='tabcontent'>";
-echo showTableHeader($t, $p, 'UniqueIdPs', $filter);
+echo showTableHeader($t, $p, 'UniqueIdPs', $filter, $sp);
 echo table(get_logidps($start, $end));
 echo "</div>";
 
 echo "<div id='Domains' class='tabcontent'>";
-echo showTableHeader($t, $p, 'Domains', $filter);
+echo showTableHeader($t, $p, 'Domains', $filter, $sp);
 echo table(get_domains($start, $end, $filter));
 echo "</div>";
 
 echo "<div id='Country' class='tabcontent'>";
-echo showTableHeader($t, $p, 'Country', $filter);
+echo showTableHeader($t, $p, 'Country', $filter, $sp);
 echo table(get_countries($start, $end, $filter));
 echo "</div>";
 
 echo "<div id='Affiliaton' class='tabcontent'>";
-echo showTableHeader($t, $p, 'Affiliaton', $filter);
+echo showTableHeader($t, $p, 'Affiliaton', $filter, $sp);
 echo table(get_affiliations($start, $end));
 echo "</div>";
 
 echo "<div id='Institutions' class='tabcontent'>";
-echo showTableHeader($t, $p, 'Institutions', $filter);
+echo showTableHeader($t, $p, 'Institutions', $filter, $sp);
 echo table(get_idps());
 echo "</div>";
 
 echo "<div id='Services' class='tabcontent'>";
-echo showTableHeader($t, $p, 'Services', $filter);
+echo showTableHeader($t, $p, 'Services', $filter, $sp);
 echo table(get_clients());
 echo "</div>";
 
