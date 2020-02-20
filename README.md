@@ -1,2 +1,2 @@
 # stats
-The stats application
+The stats application for InAcademia
