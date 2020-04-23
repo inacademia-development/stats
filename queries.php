@@ -94,6 +94,18 @@ function get_domains($s, $e, $f) {
     return get_data($query);
 }
 
+function get_ras($s, $e, $f) {
+    $query  = "select count(l.log_sessionid) c, i.idp_ra ";
+    $query .= "from logs l left join idps i on l.log_idp=i.idp_entityid ";
+    $query .= "where l.log_timestamp between '$s' and '$e' ";
+    if ($f) {
+        $query .= "and (i.idp_ra like '%$f%') ";
+    }
+    $query .= "group by i.idp_ra ";
+    $query .= "order by c desc;";
+    return get_data($query);
+}
+
 function get_countries($s, $e, $f) {
     $query  = "select count(l.log_sessionid) c, i.idp_country ";
     $query .= "from logs l left join idps i on l.log_idp=i.idp_entityid ";
