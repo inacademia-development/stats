@@ -4,7 +4,8 @@ session_start();
 
 $t = isset($_GET['t'])?$_GET['t']:time();
 $p = isset($_GET['p'])?$_GET['p']:"month";
-$tab = isset($_GET['tab'])?$_GET['tab']:"SPSessions";
+$tab = isset($_POST['tab'])?$_POST['tab']:(isset($_GET['tab'])?$_GET['tab']:"IdPSessionsPerSP");
+$sp = isset($_POST['sp'])?$_POST['sp']:(isset($_GET['sp'])?$_GET['sp']:"");
 
 if (isset($_POST['action']) and $_POST['action'] == 'clear') {
     $filter = '';
@@ -61,6 +62,16 @@ switch($p) {
         $explain = "${y}_InAcademia_" . date("Y", $s);
         break;
 }
+
+if ($sp) {
+  $explain .= "_$sp";
+}
+
+if ($filter) {
+  $explain .= "_" . str_replace(" ", "_", $filter);
+}
+
+
 // Day ends at 23:59:59
 $e -= 1;
 
@@ -82,60 +93,78 @@ echo "t,$tab\n";
 **/
 
 switch($tab) {
-	case 'UniqueSessions': 
-echo "Unique sessions\n";
-echo csv_table(get_sessions($start, $end));
-	break;
-	
-	case 'IdPSessions';
-echo "Sessions per IdP\n";
-echo csv_table(get_idpsessions($start, $end, $filter));
-	break;
-	
-	case 'SPSessions';
-echo "Sessions per Service\n";
-echo csv_table(get_spsessions($start, $end, $filter));
-	break;
+/*
+  case 'UniqueSessions':
+  echo "Unique sessions\n";
+  echo csv_table(get_sessions($start, $end));
+  break;
 
-/**	
-	case 'ServicesPerIdP';
-echo "# SP's per IdP\n";
-echo csv_table(get_spperidp($start, $end, $filter));
-	break;
-	
-	case ;
-echo "# IdP's per SP\n";
-echo csv_table(get_idppersp($start, $end, $filter));
-	break;
-**/	
+  case 'IdPSessions';
+  echo "Sessions per IdP\n";
+  echo csv_table(get_idpsessions($start, $end, $filter));
+  break;
+*/
+  case 'IdPSessionsPerSP';
+  echo "Sessions per Service\n";
+  echo csv_table(get_idpsessionspersp($start, $end, $filter, $sp));
+  break;
 
-	case 'domains';
-echo "Domains\n";
-echo csv_table(get_domains($start, $end, $filter));
-	break;
+  case 'SPSessions';
+  echo "Sessions per Service\n";
+  echo csv_table(get_spsessions($start, $end, $filter, $sp));
+  break;
 
-	case 'Country';
-echo "Countries\n";
-echo csv_table(get_countries($start, $end, $filter));
-	break;
-	
-	case 'affiliaton';
-echo "Affiliatons\n";
-echo csv_table(get_affiliations($start, $end));
-	break;
-	
-	case 'institutions';
-echo "Institutions\n";
-echo csv_table(get_idps());
-	break;
-	
-	case 'services';
-echo "Services\n";
-echo csv_table(get_clients());
-	break;
-	
-	case 'logs';
-echo "Logs\n";
-echo csv_table(get_logs());
-	break;
+/**
+  case 'ServicesPerIdP';
+  echo "# SP's per IdP\n";
+  echo csv_table(get_spperidp($start, $end, $filter));
+  break;
+
+  case ;
+  echo "# IdP's per SP\n";
+  echo csv_table(get_idppersp($start, $end, $filter));
+  break;
+**/
+
+  case 'SessionsPerCountry';
+  echo "Sessions per Service\n";
+  echo csv_table(get_sessionspercountry($start, $end, $filter, $sp));
+  break;
+
+  case 'UniqueIdPs';
+  echo "Unique IdP's\n";
+  echo csv_table(get_logidps($start, $end, $filter));
+  break;
+
+  case 'Domains';
+  echo "Domains\n";
+  echo csv_table(get_domains($start, $end, $filter));
+  break;
+
+  case 'Country';
+  echo "Countries\n";
+  echo csv_table(get_countries($start, $end, $filter));
+  break;
+
+  case 'affiliaton';
+  echo "Affiliatons\n";
+  echo csv_table(get_affiliations($start, $end));
+  break;
+
+  case 'institutions';
+  echo "Institutions\n";
+  echo csv_table(get_idps());
+  break;
+
+  case 'services';
+  echo "Services\n";
+  echo csv_table(get_clients());
+  break;
+
+/*
+  case 'logs';
+  echo "Logs\n";
+  echo csv_table(get_logs());
+  break;
+*/
 }
