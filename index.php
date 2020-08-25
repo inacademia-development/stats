@@ -186,36 +186,14 @@ echo "</div>";
 echo "</div>";
 ?>
 
-
-<!-- Tab links -->
-<!--
-<div class="tab">
-  <button class="tablinks" onclick="openTab(event, 'UniqueSessions')">Unique Sessions</button>
-  <button class="tablinks" onclick="openTab(event, 'IdPSessions')">Session per IdP</button>
-  <button class="tablinks" onclick="openTab(event, 'SPSessions')">Session per Service</button>
-  -->
-  <!--
-  <button class="tablinks" onclick="openTab(event, 'ServicesPerIdP')">Services per IdP</button>
-  <button class="tablinks" onclick="openTab(event, 'IdPs_per_Service')">IdPs per Service</button>
-  -->
-  <!--
-  <button class="tablinks" onclick="openTab(event, 'Domains')">Domains</button>
-  <button class="tablinks" onclick="openTab(event, 'Country')">Country</button>
-  <button class="tablinks" onclick="openTab(event, 'Affiliaton')">Affiliation</button>
-  <button class="tablinks" onclick="openTab(event, 'Institutions')">Institutions</button>
-  <button class="tablinks" onclick="openTab(event, 'Services')">Services</button>
-  <button class="tablinks" onclick="openTab(event, 'Logs')">Logs</button>
-</div>
--->
-
 <!-- Tab links -->
 <div class="tab">
   <button class="tablinks" onclick="openURL(null,'UniqueSessions',null,null)">Unique Sessions</button>
   <button class="tablinks" onclick="openURL(null,'IdPSessions',null,null)">Session per IdP</button>
   <button class="tablinks" onclick="openURL(null,'SPSessions',null,null)">Session per Service</button>
   <!--
-  <button class="tablinks" onclick="openTab(event, 'ServicesPerIdP')">Services per IdP</button>
-  <button class="tablinks" onclick="openTab(event, 'IdPs_per_Service')">IdPs per Service</button>
+  <button class="tablinks" onclick="openURL(null,'ServicesPerIdP',null,null)">Services per IdP</button>
+  <button class="tablinks" onclick="openURL(null,'IdPs_per_Service',null,null)">IdPs per Service</button>
   -->
   <button class="tablinks" onclick="openURL(null,'Domains',null,null)">Domains</button>
   <button class="tablinks" onclick="openURL(null,'Country',null,null)">Country</button>
