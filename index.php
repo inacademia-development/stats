@@ -1,4 +1,7 @@
 <?php
+
+$start_time = intval(explode(" ", microtime())[1]);
+
 include('queries.php');
 include('auth.php');
 
@@ -85,7 +88,7 @@ $p = isset($_GET['p'])?$_GET['p']:"month";
 $filter = isset($_GET['f'])?$_GET['f']:"";
 $tab = isset($_GET['tab'])?$_GET['tab']:"SPSessions";
 
-
+print("Active tab = " . $tab);
 
 echo "<body onLoad='openTab(event, &quot;".$tab."&quot;)'>";
 echo "<div><table><tr><td>";
@@ -187,14 +190,17 @@ echo "</div>";
 
 
 <!-- Tab links -->
+<!--
 <div class="tab">
   <button class="tablinks" onclick="openTab(event, 'UniqueSessions')">Unique Sessions</button>
   <button class="tablinks" onclick="openTab(event, 'IdPSessions')">Session per IdP</button>
   <button class="tablinks" onclick="openTab(event, 'SPSessions')">Session per Service</button>
+  -->
   <!--
   <button class="tablinks" onclick="openTab(event, 'ServicesPerIdP')">Services per IdP</button>
   <button class="tablinks" onclick="openTab(event, 'IdPs_per_Service')">IdPs per Service</button>
   -->
+  <!--
   <button class="tablinks" onclick="openTab(event, 'Domains')">Domains</button>
   <button class="tablinks" onclick="openTab(event, 'Country')">Country</button>
   <button class="tablinks" onclick="openTab(event, 'Affiliaton')">Affiliation</button>
@@ -202,65 +208,122 @@ echo "</div>";
   <button class="tablinks" onclick="openTab(event, 'Services')">Services</button>
   <button class="tablinks" onclick="openTab(event, 'Logs')">Logs</button>
 </div>
+-->
+
+<!-- Tab links -->
+<div class="tab">
+  <button class="tablinks" onclick="openURL(null,'UniqueSessions',null,null)">Unique Sessions</button>
+  <button class="tablinks" onclick="openURL(null,'IdPSessions',null,null)">Session per IdP</button>
+  <button class="tablinks" onclick="openURL(null,'SPSessions',null,null)">Session per Service</button>
+  <!--
+  <button class="tablinks" onclick="openTab(event, 'ServicesPerIdP')">Services per IdP</button>
+  <button class="tablinks" onclick="openTab(event, 'IdPs_per_Service')">IdPs per Service</button>
+  -->
+  <button class="tablinks" onclick="openURL(null,'Domains',null,null)">Domains</button>
+  <button class="tablinks" onclick="openURL(null,'Country',null,null)">Country</button>
+  <button class="tablinks" onclick="openURL(null,'Affiliaton',null,null)">Affiliation</button>
+  <button class="tablinks" onclick="openURL(null,'Institutions',null,null)">Institutions</button>
+  <button class="tablinks" onclick="openURL(null,'Services',null,null)">Services</button>
+  <button class="tablinks" onclick="openURL(null,'Logs',null,null)">Logs</button>
+</div>
 
 <?php
 echo "<div id='UniqueSessions' class='tabcontent'>";
-echo showTableHeader($t, $p, 'UniqueSessions', $filter); 
-echo table(get_sessions($start, $end));
+if ($tab == 'UniqueSessions')
+{
+    echo showTableHeader($t, $p, 'UniqueSessions', $filter); 
+    echo table(get_sessions($start, $end));
+}
 echo "</div>";
 
 echo "<div id='IdPSessions' class='tabcontent'>";
-echo showTableHeader($t, $p, 'IdPSessions', $filter); 
-echo table(get_idpsessions($start, $end, $filter));
+if ($tab == 'IdPSessions')
+{
+    echo showTableHeader($t, $p, 'IdPSessions', $filter); 
+    echo table(get_idpsessions($start, $end, $filter));
+}
 echo "</div>";
 
 echo "<div id='SPSessions' class='tabcontent'>";
-echo showTableHeader($t, $p, 'SPSessions', $filter); 
-echo table(get_spsessions($start, $end, $filter));
+if ($tab == 'SPSessions')
+{
+    echo showTableHeader($t, $p, 'SPSessions', $filter); 
+    echo table(get_spsessions($start, $end, $filter));
+}
 echo "</div>";
 
 echo "<div id='ServicesPerIdP' class='tabcontent'>";
-echo showTableHeader($t, $p, 'ServicesPerIdP', $filter); 
-echo table(get_spperidp($start, $end, $filter));
+if ($tab == 'ServicesPerIdP')
+{
+    echo showTableHeader($t, $p, 'ServicesPerIdP', $filter); 
+    echo table(get_spperidp($start, $end, $filter));
+}
 echo "</div>";
 
 echo "<div id='IdPs_per_Service' class='tabcontent'>";
-echo showTableHeader($t, $p, 'IdPs_per_Service', $filter); 
-echo table(get_idppersp($start, $end, $filter));
+if ($tab == 'IdPs_per_Service')
+{
+    echo showTableHeader($t, $p, 'IdPs_per_Service', $filter); 
+    echo table(get_idppersp($start, $end, $filter));
+}
 echo "</div>";
 
 echo "<div id='Domains' class='tabcontent'>";
-echo showTableHeader($t, $p, 'Domains', $filter); 
-echo table(get_domains($start, $end, $filter));
+if ($tab == 'Domains')
+{
+    echo showTableHeader($t, $p, 'Domains', $filter); 
+    echo table(get_domains($start, $end, $filter));
+}
 echo "</div>";
 
 echo "<div id='Country' class='tabcontent'>";
-echo showTableHeader($t, $p, 'Country', $filter); 
-echo table(get_countries($start, $end, $filter));
+if ($tab == 'Country')
+{
+    echo showTableHeader($t, $p, 'Country', $filter); 
+    echo table(get_countries($start, $end, $filter));
+}
 echo "</div>";
 
 echo "<div id='Affiliaton' class='tabcontent'>";
-echo showTableHeader($t, $p, 'Affiliaton', $filter); 
-echo table(get_affiliations($start, $end));
+if ($tab == 'Affiliaton')
+{
+    echo showTableHeader($t, $p, 'Affiliaton', $filter); 
+    echo table(get_affiliations($start, $end));
+}
 echo "</div>";
 
 echo "<div id='Institutions' class='tabcontent'>";
-echo showTableHeader($t, $p, 'Institutions', $filter); 
-echo table(get_idps());
+if ($tab == 'Institutions')
+{
+    echo showTableHeader($t, $p, 'Institutions', $filter); 
+    echo table(get_idps());
+}
 echo "</div>";
 
 echo "<div id='Services' class='tabcontent'>";
-echo showTableHeader($t, $p, 'Services', $filter); 
-echo table(get_clients());
+if ($tab == 'Services')
+{    
+    echo showTableHeader($t, $p, 'Services', $filter); 
+    echo table(get_clients());
+}
 echo "</div>";
 
 echo "<div id='Logs' class='tabcontent'>";
-echo showTableHeader($t, $p, 'Logs', $filter); 
-echo table(get_logs());
+if ($tab == 'Logs')
+{
+    echo showTableHeader($t, $p, 'Logs', $filter); 
+    echo table(get_logs());
+}
 echo "</div>";
 
+// Some background data
 $attributes = $as->getAttributes();   
-print_r("<div align='right'>Authenticated as: ". get_displayname($attributes)."</div>");
+
+$finish_time = intval(explode(" ", microtime())[1]);
+$total_time = round(($finish_time - $start_time), 1);
+
+print_r("<div align='right'>Authenticated as: ". get_displayname($attributes)."</br>Page created in Created in " .$total_time." s. </div>");
+
 echo "</td></tr></table></div>";
 ?>
 
