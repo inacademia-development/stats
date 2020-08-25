@@ -88,8 +88,6 @@ $p = isset($_GET['p'])?$_GET['p']:"month";
 $filter = isset($_GET['f'])?$_GET['f']:"";
 $tab = isset($_GET['tab'])?$_GET['tab']:"SPSessions";
 
-print("Active tab = " . $tab);
-
 echo "<body onLoad='openTab(event, &quot;".$tab."&quot;)'>";
 echo "<div><table><tr><td>";
 echo "<form method='post' name='state_form' id='state_form'>";
