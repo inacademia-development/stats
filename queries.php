@@ -19,7 +19,7 @@ if ($mysqli->connect_errno) {
 
 function get_data($query) {
     
-    echo "This query: <pre>$query</pre>";
+    //echo "This query: <pre>$query</pre>";
     
     global $mysqli;
     $res = $mysqli->query($query);
