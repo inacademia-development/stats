@@ -1,6 +1,6 @@
 <?php
 
-$start_time = intval(explode(" ", microtime())[1]);
+$start_time = floatval(explode(" ", microtime())[1])+floatval(explode(" ", microtime())[0]);
 
 include('queries.php');
 include('auth.php');
@@ -319,10 +319,10 @@ echo "</div>";
 // Some background data
 $attributes = $as->getAttributes();   
 
-$finish_time = intval(explode(" ", microtime())[1]);
-$total_time = round(($finish_time - $start_time), 1);
+$finish_time = floatval(explode(" ", microtime())[1])+floatval(explode(" ", microtime())[0]);
+$total_time = round(($finish_time - $start_time), 3);
 
-print_r("<div align='right'>Authenticated as: ". get_displayname($attributes)."</br>Page created in Created in " .$total_time." s. </div>");
+print_r("<div align='right'>Authenticated as: ". get_displayname($attributes)."</br>Page created in " .$total_time." s. </div>");
 
 echo "</td></tr></table></div>";
 ?>
