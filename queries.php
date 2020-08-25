@@ -18,6 +18,9 @@ if ($mysqli->connect_errno) {
 }
 
 function get_data($query) {
+    
+    echo "This query: <pre>$query</pre>";
+    
     global $mysqli;
     $res = $mysqli->query($query);
     if (!$res) {
@@ -35,37 +38,46 @@ function get_sessions($s, $e) {
 }
 
 function get_idpsessions($s, $e, $f) {
-    $query  = "select count(l.log_sessionid) c, l.log_idp, ANY_VALUE(i.idp_displayname) displayname ";
-    $query .= "from logs l left join idps i on l.log_idp=i.idp_entityid ";
+    $query  = "select c, idp_displayname as Displayname, idp_entityid as EntityID from ";
+    $query .= "idps idp, ";
+    $query .= "(select count(l.log_sessionid) c, l.log_idp ";
+    $query .= "from logs l ";
     $query .= "where l.log_timestamp between '$s' and '$e' ";
     if ($f) {
         $query .= "and (l.log_idp like '%$f%' or i.idp_displayname like '%$f%') ";
     }
-    $query .= "group by l.log_idp ";
+    $query .= "group by l.log_idp) log ";
+    $query .= "where log.log_idp = idp.idp_entityid ";
     $query .= "order by c desc;";
     return get_data($query);
 }
 
 function get_spsessions($s, $e, $f) {
-    $query  = "select count(l.log_sessionid) c, l.log_sp ";
+    $query  = "select c, client_displayname as Displayname, client_name as client_id from ";
+    $query .= "clients cl, ";
+    $query .= "(select count(l.log_sessionid) c, l.log_sp ";
     $query .= "from logs l ";
     $query .= "where l.log_timestamp between '$s' and '$e' ";
     if ($f) {
         $query .= "and (l.log_sp like '%$f%') ";
     }
-    $query .= "group by l.log_sp ";
+    $query .= "group by l.log_sp) log ";
+    $query .= "where log.log_sp = cl.client_name ";   
     $query .= "order by c desc;";
     return get_data($query);
 }
 
 function get_spperidp($s, $e, $f) {
-    $query  = "select count(l.log_sp) c, l.log_idp, ANY_VALUE(i.idp_displayname) displayname ";
+    $query  = "select c, idp_displayname as Displayname, idp_entityid as EntityID from ";
+    $query .= "idps idp, ";
+    $query .= "(select count(l.log_sp) c, l.log_idp, ANY_VALUE(i.idp_displayname) displayname ";
     $query .= "from logs l left join idps i on l.log_idp=i.idp_entityid ";
     $query .= "where l.log_timestamp between '$s' and '$e' ";
     if ($f) {
         $query .= "and (l.log_idp like '%$f%' or i.idp_displayname like '%$f%') ";
     }
-    $query .= "group by l.log_idp ";
+    $query .= "group by l.log_idp) log ";
+    $query .= "where log.log_idp = idp.idp_entityid ";
     $query .= "order by c desc;";
     return get_data($query);
 }
