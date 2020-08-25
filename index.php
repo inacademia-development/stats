@@ -108,7 +108,7 @@ echo "<button class='tablinks' onclick='openURL(null,null,null,&quot;week&quot;)
 echo "<button class='tablinks' onclick='openURL(null,null,null,&quot;month&quot;)'>Month</button>";
 echo "<button class='tablinks' onclick='openURL(null,null,null,&quot;year&quot;)'>Year</button>";
 echo "</div>";
-/**
+
 echo "<div class='menutab_element'>";
 echo "<button class='tablinks'>       <b>Filter:</b>   </button>";
 echo "</div>";
@@ -119,7 +119,7 @@ echo "<button class='tablinks' onclick='openURL(null,null,document.getElementByI
 echo "<button class='tablinks' onclick='openURL(null,null,&quot;&quot;,null)'>Clear</button>";
 echo "</form>";
 echo "</div>";
-**/
+
 echo "</div>";
 
 $date = getdate($t);

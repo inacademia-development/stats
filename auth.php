@@ -1,10 +1,11 @@
 <?php
 
 require_once('/var/simplesamlphp/lib/_autoload.php');
+require_once('/tmp/inacademia/config/groups.php');
 $as = new \SimpleSAML\Auth\Simple('default-sp');
 $as->requireAuth();
 
-$required_group = "GN4Phase3:WPs:WP5 T2";
+$required_group = $AUTHZ_GROUPS;
 
 $attributes = $as->getAttributes();   
 $displayname = get_displayname($attributes);
