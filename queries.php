@@ -34,6 +34,8 @@ function mkEntityFileter($sp="", $idp="",$fed="") {
 function get_data($query) {
     
     //echo "This query: <pre>$query</pre>";
+    global $qry_debug;
+    array_push($qry_debug, $query);
     
     global $mysqli;
     $res = $mysqli->query($query);
@@ -120,12 +122,12 @@ function get_idpsessions($s, $e, $p, $f="", $sp="", $idp="") {
     $query .= "(select count(l.log_sessionid) c, l.log_idp ";
     $query .= "from logs l ";
     $query .= "where l.log_timestamp between '$s' and '$e' ";
-    if ($f) {
-        $query .= "and (l.log_idp like '%$f%' or i.idp_displayname like '%$f%') ";
-    }
     $query .= mkEntityFileter($sp, $idp);
     $query .= "group by l.log_idp) log ";
     $query .= "where log.log_idp = idp.idp_entityid ";
+    if ($f) {
+        $query .= "and (idp_entityid like '%$f%' or idp_displayname like '%$f%')";
+    }
     $query .= "order by c desc;";
     return get_data($query);
 }
@@ -142,12 +144,15 @@ function get_spsessions($s, $e, $p, $f="", $sp="", $idp="") {
     $query .= mkEntityFileter($sp, $idp);
     $query .= "group by l.log_sp) log ";
     $query .= "where log.log_sp = cl.client_name ";   
+    if ($f) {
+        $query .= "and (client_displayname like '%$f%' or client_name like '%$f%')";
+    }
     $query .= "order by c desc;";
     return get_data($query);
 }
 
 function get_domains($s, $e, $p, $f, $sp="", $idp="") {
-    $query  = "select count(l.log_sessionid) c, l.log_domain ";
+    $query  = "select count(l.log_sessionid) as c, l.log_domain as Domain ";
     $query .= "from logs l ";
     $query .= "where l.log_timestamp between '$s' and '$e' ";
     if ($f) {
@@ -160,7 +165,7 @@ function get_domains($s, $e, $p, $f, $sp="", $idp="") {
 }
 
 function get_countries($s, $e, $p, $f, $sp="", $idp="") {
-    $query  = "select count(l.log_sessionid) c, i.idp_country ";
+    $query  = "select count(l.log_sessionid) as c, i.idp_country as Country ";
     $query .= "from logs l left join idps i on l.log_idp=i.idp_entityid ";
     $query .= "where l.log_timestamp between '$s' and '$e' ";
     if ($f) {
@@ -173,32 +178,32 @@ function get_countries($s, $e, $p, $f, $sp="", $idp="") {
 }
 
 function get_affiliations($s, $e, $p, $f, $sp="", $idp="") {
-    $query  = "select count(log_affiliate) c, 'affiliate' from logs l where log_affiliate=1 ";
+    $query  = "select count(log_affiliate) c, 'affiliate' as Affiliation from logs l where log_affiliate=1 ";
     $query .= "and l.log_timestamp between '$s' and '$e' ";
     $query .= mkEntityFileter($sp, $idp);
     $query .= "group by log_affiliate ";
 
-    $query .= "union select count(log_employee) c, 'employee' from logs l where log_employee=1 ";
+    $query .= "union select count(log_employee) c, 'employee' as Affiliation from logs l where log_employee=1 ";
     $query .= "and l.log_timestamp between '$s' and '$e' ";
     $query .= mkEntityFileter($sp, $idp);
     $query .= "group by log_employee ";
 
-    $query .= "union select count(log_member) c, 'member' from logs l where log_member=1 ";
+    $query .= "union select count(log_member) c, 'member' as Affiliation from logs l where log_member=1 ";
     $query .= "and l.log_timestamp between '$s' and '$e' ";
     $query .= mkEntityFileter($sp, $idp);
     $query .= "group by log_member ";
 
-    $query .= "union select count(log_faculty) c, 'faculty' from logs l where log_faculty=1 ";
+    $query .= "union select count(log_faculty) c, 'faculty' as Affiliation from logs l where log_faculty=1 ";
     $query .= "and l.log_timestamp between '$s' and '$e' ";
     $query .= mkEntityFileter($sp, $idp);
     $query .= "group by log_faculty ";
 
-    $query .= "union select count(log_staff) c, 'staff' from logs l where log_staff=1 ";
+    $query .= "union select count(log_staff) c, 'staff' as Affiliation from logs l where log_staff=1 ";
     $query .= "and l.log_timestamp between '$s' and '$e' ";
     $query .= mkEntityFileter($sp, $idp);
     $query .= "group by log_staff ";
 
-    $query .= "union select count(log_student) c, 'student' from logs l where log_student=1 ";
+    $query .= "union select count(log_student) c, 'student' as Affiliation from logs l where log_student=1 ";
     $query .= "and l.log_timestamp between '$s' and '$e' ";
     $query .= mkEntityFileter($sp, $idp);
     $query .= "group by log_student ";
@@ -219,7 +224,7 @@ function get_idps($s, $e, $p, $f, $sp="", $idp="") {
 
 function get_clients($s, $e, $p, $f, $sp="", $idp="") {
    
-    $query = "SELECT client_displayname as Displayname, client_name as Client_ID FROM clients WHERE client_name IN (";
+    $query = "SELECT client_displayname as Displayname, client_name as ClientID FROM clients WHERE client_name IN (";
     $query .= "SELECT DISTINCT(log_sp) FROM audit_db.logs l where 1=1 ";
     $query .= "and l.log_timestamp between '$s' and '$e' ";
     $query .= mkEntityFileter($sp, $idp);
