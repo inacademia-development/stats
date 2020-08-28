@@ -92,6 +92,7 @@ pre {
   overflow: hidden;
   border: 1px solid #ccc;
   background-color: #f1f1f1;
+  width: fill;
 }
 
 /* Style the buttons that are used to open the tab content */
@@ -128,6 +129,6 @@ pre {
 
 .menutab_element {
   #width: 400px;
-  float: left;
+  #float: left;
   display: inline-block;
 }

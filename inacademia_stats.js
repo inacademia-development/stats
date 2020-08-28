@@ -21,22 +21,22 @@ function openTab(evt, tabName) {
   setState(null, tabName, null, null);
 } 
 
-function openURL(time, tab, filter, interval) {
-	setState(time, tab, filter, interval);
+function openURL(time, tab, filter, interval, sp, idp) {
+	setState(time, tab, filter, interval, sp, idp);
 	
 	cur_state = getState();
 	
 	var loc = String(window.location);
 	var res = loc.split("?");
 	
-	window.location.replace(res[0] + "?t=" + cur_state["time"] +"&tab=" +cur_state["tab"]+ "&f=" +cur_state["filter"]+ "&p=" +cur_state["interval"]);
+	window.location.replace(res[0] + "?t=" + cur_state["time"] +"&tab=" +cur_state["tab"]+ "&f=" +cur_state["filter"]+ "&p=" +cur_state["interval"]+"&sp=" +cur_state["sp"]+"&idp=" +cur_state["idp"]);
 }
 
 function setActive(type, active_type) {
 	return (type == active_type) ? "button_selected" :"button";
 }
 
-function setState(time, tab, filter, interval) {
+function setState(time, tab, filter, interval, sp, idp) {
 	if (time != null) { 
 		document.getElementById('state_form').elements["time"].value = time;
 	}
@@ -49,6 +49,12 @@ function setState(time, tab, filter, interval) {
 	if (interval != null) { 
 		document.getElementById('state_form').elements["interval"].value = interval;
 	}
+    if (sp != null) { 
+		document.getElementById('state_form').elements["sp"].value = sp;
+	}
+    if (idp != null) { 
+		document.getElementById('state_form').elements["idp"].value = idp;
+	}
 }
 
 function getState() {
@@ -58,7 +64,8 @@ function getState() {
 	state["tab"] = document.getElementById('state_form').elements["tab"].value;
 	state["filter"] = document.getElementById('state_form').elements["filter"].value;
 	state["interval"] = document.getElementById('state_form').elements["interval"].value;
-	
+	state["sp"] = document.getElementById('state_form').elements["sp"].value;
+	state["idp"] = document.getElementById('state_form').elements["idp"].value;	
 	return state;
 }
 
