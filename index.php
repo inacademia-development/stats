@@ -1,12 +1,12 @@
 <?php
 
+$showdebug = false;
 $start_time = floatval(explode(" ", microtime())[1])+floatval(explode(" ", microtime())[0]);
 
 include('queries.php');
 include('auth.php');
-
 $qry_debug = [];
-$showdebug = false;
+
 
 function asTable($res) {
     $res->data_seek(0);
